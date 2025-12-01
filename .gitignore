@@ -1,0 +1,14 @@
+# 忽略所有文件
+*
+
+# 白名单：只追踪以下内容
+!.gitignore
+!DM.py
+!daomeng/
+!daomeng/**
+!.github/
+!.github/**
+
+# 仍然忽略 daomeng 下的缓存
+daomeng/__pycache__/
+daomeng/platform-tools/

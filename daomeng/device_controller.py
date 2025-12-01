@@ -474,7 +474,7 @@ class DeviceController:
                     student.status = f"颁发失败（{exc}）"
                     return student
                 else:
-                    self._logger.error(f"为 {student.student_id} 颁发学分时发生异常: {exc}，自动重试")
+                    self._logger.info(f"为 {student.student_id} 颁发学分时发生异常: {exc}，自动重试")
                 c += 1
             
     def cleanup(self) -> None:

@@ -32,6 +32,14 @@ SELECTORS: Dict[str, Dict[str, str]] = {
     "活动搜索框": {
         "resourceId": f"{DMKJ_PACKAGE_NAME}:id/text_searchcontent",
     },
+    "活动筛选": {
+        "resourceId": f"{DMKJ_PACKAGE_NAME}:id/radio_condition",
+        "text": "筛选",
+    },
+    "活动筛选：已结束": {
+        "resourceId": f"{DMKJ_PACKAGE_NAME}:id/title",
+        "text": "已结束",
+    },
     "活动管理": {"resourceId": f"{DMKJ_PACKAGE_NAME}:id/tv_tag_bb", "text": "管理活动"},
     # 学分相关
     "管理列表": {"resourceId": f"{DMKJ_PACKAGE_NAME}:id/menurv"},

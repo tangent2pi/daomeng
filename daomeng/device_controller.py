@@ -25,7 +25,7 @@ class DeviceController:
     ) -> None:
         self._config = config
         self._logger = logger
-        self.device: Optional[u2.Device] = None
+        self.device: u2.Device = None  # type: ignore # 延迟连接
         self.score: Optional[float] = None
         self._live: Optional[Live] = None  # 用于暂停 Live 显示以进行用户交互
         
@@ -137,8 +137,6 @@ class DeviceController:
         device.settings["wait_timeout"] = 15.0
         self.device = device
         self._logger.info(f"设备连接成功: {device.device_info.get('brand', 'Unknown')} {device.device_info.get('model', 'Unknown')} (SDK: {device.device_info.get('version', 'Unknown')})")
-        device.unlock()
-        self._logger.info("屏幕已尝试唤醒并解锁")
         return device
 
     def _pair_device(self) -> None:
@@ -364,6 +362,11 @@ class DeviceController:
                         if d(**SELECTORS["无结果"]).exists:
                             self._logger.error(f"未找到活动: {self._config.activity_name}")
                             raise RuntimeError(f"未找到活动: {self._config.activity_name}")
+                        if d(**SELECTORS["活动筛选"]).exists and not d(**SELECTORS["活动筛选：已结束"]).exists:
+                            d(**SELECTORS["活动筛选"]).click()
+                            sleep(0.3)
+                            d(**SELECTORS["活动筛选：已结束"]).click()
+                        d(**SELECTORS["加载"]).wait_gone()
                         d(**SELECTORS["活动管理"]).click()
                         self._logger.debug("进入活动管理页面")
                     if current == "管理列表":

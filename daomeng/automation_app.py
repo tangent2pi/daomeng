@@ -51,6 +51,7 @@ class AutomationApp:
                     
                     with self.device_controller.fast_input():
                         self.logger.info("开始运行自动化任务")
+                        self.device_controller.device.unlock()
                         progress_task_1 = progress.add_task("总进度", total=total_students)
                         for point in points_list:
                             self.logger.info("="*60)

@@ -53,6 +53,9 @@ SELECTORS: Dict[str, Dict[str, str]] = {
         "resourceId": f"{DMKJ_PACKAGE_NAME}:id/radio_luqu",
         "text": "未获得任何学分",
     },
+    "已获得其他学分": {
+        "resourceId": f"{DMKJ_PACKAGE_NAME}:id/radio_sign", "text": "已获得其他学分",
+    },
     "人员信息": {"resourceId": f"{DMKJ_PACKAGE_NAME}:id/title", "index": "0"},
     "颁发1人": {
         "resourceId": f"{DMKJ_PACKAGE_NAME}:id/tv_step",

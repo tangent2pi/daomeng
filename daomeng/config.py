@@ -26,6 +26,7 @@ class AutomationConfig:
     accounts: Optional[dict[str, str]]
     activity_name: str
     yiban_mapping: Optional[Path]
+    click_other_tab: bool = False
 
 
 @dataclass

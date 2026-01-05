@@ -28,6 +28,7 @@ class CLIOptions:
     recovered: Optional[Path]
     accounts: Optional[dict[str, str]]
     yiban_mapping: Optional[Path]
+    click_other_tab: bool
     
 
 def _save_to_json(config: AutomationConfig, config_path: Path) -> None:
@@ -40,6 +41,7 @@ def _save_to_json(config: AutomationConfig, config_path: Path) -> None:
             "file_dir": [(str(path), pts) for pts, path in config.file_dir.items()] if config.file_dir else None,
             "accounts": config.accounts if config.accounts else None,
             "yiban_mapping": str(config.yiban_mapping) if config.yiban_mapping else None,
+            "click_other_tab": config.click_other_tab,
         }, f, ensure_ascii=False, indent=4)
         
         
@@ -50,6 +52,7 @@ def _load_from_json(config_path: Path) -> dict:
     data["additional_list"] = Path(data["additional_list"]) if data.get("additional_list") else None
     data["accounts"] = data.get("accounts") if data.get("accounts") else None
     data["yiban_mapping"] = Path(data["yiban_mapping"]) if data.get("yiban_mapping") else None
+    data["click_other_tab"] = bool(data.get("click_other_tab", False))
     return data
 
 
@@ -105,6 +108,11 @@ def _build_parser() -> argparse.ArgumentParser:
         help="传入 易班导出学生信息 CSV文件绝对路径，包含姓名、学号、易班ID三列。",
         metavar='PATH'
     )
+    parser.add_argument(
+        "--click-other-tab",
+        action="store_true",
+        help="在发分搜索前，先点击“已获得其他学分”tab再进行搜索。"
+    )
     return parser
 
 
@@ -117,6 +125,7 @@ def _parse_args(argv: Optional[list[str]] = None) -> CLIOptions:
     additional_list: Optional[Path] = args.a
     accounts: Optional[dict[str, str]] = None
     yiban_mapping: Optional[Path] = None
+    click_other_tab: bool = args.click_other_tab
     
     if args.f is None and args.r is None:
         raise ValueError("必须指定 -r 或 -f 参数。")
@@ -140,6 +149,7 @@ def _parse_args(argv: Optional[list[str]] = None) -> CLIOptions:
         device = args.d if args.d else recovered_config.get("device", "")
         additional_list = recovered_config.get("additional_list")
         file_dir = recovered_config.get("file_dir", [])
+        click_other_tab = recovered_config.get("click_other_tab", False)
         
         # 账号信息：允许传入新的账号信息覆盖
         if args.u:
@@ -203,7 +213,8 @@ def _parse_args(argv: Optional[list[str]] = None) -> CLIOptions:
         init_device = args.i,
         recovered = args.r,
         accounts = accounts if accounts else None,
-        yiban_mapping = yiban_mapping if yiban_mapping else None
+        yiban_mapping = yiban_mapping if yiban_mapping else None,
+        click_other_tab = click_other_tab,
     )
 
 
@@ -267,6 +278,7 @@ def run_cli(argv: Optional[list[str]] = None) -> int:
         accounts=options.accounts,
         activity_name=activity_name,
         yiban_mapping=options.yiban_mapping,
+        click_other_tab=options.click_other_tab,
     )
     
     _save_to_json(config, output_dir)

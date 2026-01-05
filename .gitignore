@@ -12,3 +12,6 @@
 # 仍然忽略 daomeng 下的缓存
 daomeng/__pycache__/
 daomeng/platform-tools/
+daomeng/scrcpy-win64-v3.3.3/
+
+robust_*

@@ -427,6 +427,13 @@ class DeviceController:
                     self._logger.error(f"导航到发分界面失败，无法为 {student.student_id} 颁发学分")
                     raise RuntimeError("导航到发分界面失败")
             try:
+                if self._config.click_other_tab:
+                    self._logger.debug("已启用点击“已获得其他学分”tab，再执行搜索")
+                    if d(**SELECTORS["已获得其他学分"]).exists:
+                        d(**SELECTORS["已获得其他学分"]).click()
+                        d(**SELECTORS["加载"]).wait_gone()
+                    else:
+                        self._logger.warning("未找到“已获得其他学分”tab，继续原流程")
                 self._logger.debug(f"搜索学生: {student.student_id}")
                 d(**SELECTORS["人员搜索框"]).set_text(student.student_id)
                 d.press("enter")

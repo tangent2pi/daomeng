@@ -105,10 +105,23 @@ class DeviceController:
             self._logger.debug("快速输入模式已启用")
             yield
         finally:
+            self._restore_input_method(orig)
+
+    def _restore_input_method(self, orig: str) -> None:
+        d = self.device
+        if not d:
+            self._logger.warning("设备未连接，跳过恢复原始输入法")
+            return
+        try:
             self._logger.info("恢复原始输入法")
             d.set_fastinput_ime(False)
-            d.shell(f"ime set {orig}")
-            self._logger.debug(f"已恢复输入法为: {orig}")
+            if orig:
+                d.shell(f"ime set {orig}")
+                self._logger.debug(f"已恢复输入法为: {orig}")
+            else:
+                self._logger.warning("未记录到原始输入法，仅关闭 AdbKeyboard")
+        except Exception as exc:
+            self._logger.warning(f"恢复原始输入法失败，继续完成后续流程: {exc}")
 
     def connect(self) -> u2.Device:
         self._logger.info("开始连接设备...")

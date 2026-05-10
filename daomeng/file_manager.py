@@ -510,7 +510,7 @@ class FileManager:
 
             auto_mapped = False
             if (
-                match_count > 1
+                (match_count > 1 or match_count == 0)
                 and choice in {"2", "3"}
                 and matched_students is not None
                 and not matched_students.empty
